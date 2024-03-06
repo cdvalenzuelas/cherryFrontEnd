@@ -1,0 +1,92 @@
+.readableModal {
+  height: 50% !important;
+  margin: 0;
+  width: 50% !important;
+}
+
+.editableModal {
+  font-display: flex;
+  flex-direction: row;
+  height: 80vh;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  width: 50rem;
+  position: relative;
+}
+
+.editableModalForm {
+  width: 50%;
+  gap: 0.5rem;
+  padding: 2rem;
+  overflow-y: scroll;
+}
+
+.editableModalInfo {
+  width: 50%;
+}
+
+.info {
+  height: 100%;
+  border-radius: 0;
+}
+
+/* Celulares */
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+  .readableModal {
+    height: 80% !important;
+    width: 80% !important;
+    margin: 0;
+  }
+
+  .editableModal {
+    height: 80% !important;
+    width: 80%;
+    position: relative;
+    overflow-y: scroll;
+  }
+
+  .editableModalForm {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    height: 100% !important;
+    z-index: 10;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .editableModalFormMoved {
+    height: 10% !important;
+    transform: translateY(900%);
+  }
+
+  .editableModalInfo {
+    width: 50%;
+  }
+
+  .info {
+    height: 90%;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .mobileDayModal {
+    padding: 1rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .EditableModal {
+    height: 100vh !important;
+    width: 100vw !important;
+  }
+}
+
+@media only screen and (min-width: 1281px) {
+  .EditableModal {
+    width: 80vw;
+  }
+}

@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-size: 12px;
+  padding: 1em;
+  margin: 0;
+  padding: 0;
+  /* COLORES */
+  --blue1: #009cd3;
+  --blue2: #67c6da;
+  --withe: #fff;
+  --gray1: #f1f5f9;
+  --gray2: #94a3b8;
+  --danger: #f31260;
+  --warning: #f5a524;
+  --success: #17c964;
+  color: var(--gray2);
+  --gradient1: linear-gradient(to bottom right, var(--blue1), var(--blue2));
+
+  /* Salsa: Rojo Pasión con opacidad */
+  --salsa-color: rgba(255, 0, 0);
+
+  /* Bachata: Azul Celeste con opacidad */
+  --bachata-color: rgba(135, 206, 235);
+
+  /* Afro: Amarillo Sol con opacidad */
+  --afro-color: rgba(255, 215, 0);
+
+  /* Reggaetón: Negro Urbano con opacidad */
+  --reggaeton-color: rgba(0, 0, 0);
+
+  /* Dancehall: Verde Neón con opacidad */
+  --dancehall-color: rgba(57, 255, 20);
+
+  /* Sexy Style: Rosa Caliente con opacidad */
+  --sexy-style-color: rgba(255, 105, 180);
+
+  /* Twerk: Morado Eléctrico con opacidad */
+  --twerk-color: rgba(128, 0, 128);
+
+  /* Urbano: Gris Grafito con opacidad */
+  --urbano-color: rgba(112, 128, 144);
+
+  /* Latino: Naranja Tropical con opacidad */
+  --latino-color: rgba(255, 140, 0);
+}
+
+*,
+::after,
+::before {
+  /* outline: 1px solid salmon; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: bold;
+  color: var(--blue1);
+}
+
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+  :root {
+    font-size: 6px;
+    color: var(--gray2);
+  }
+
+  .mobileHide {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  :root {
+    font-size: 10px;
+  }
+
+  .desktopHide {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  :root {
+    font-size: 12px;
+  }
+
+  .desktopHide {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1280px) {
+  :root {
+    font-size: 14px;
+  }
+
+  .desktopHide {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 1281px) {
+  :root {
+    font-size: 16px;
+  }
+
+  .desktopHide {
+    display: none;
+  }
+}
+
+h1 {
+  font-size: calc(2rem);
+}
+
+h2 {
+  font-size: calc(1.75rem);
+}
+
+h3 {
+  font-size: calc(1.5rem);
+}

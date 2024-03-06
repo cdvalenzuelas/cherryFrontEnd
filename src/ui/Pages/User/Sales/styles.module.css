@@ -1,0 +1,60 @@
+.newSale {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+}
+
+.card {
+  padding: 1.5rem;
+}
+
+.accordion {
+  width: 80% !important;
+  margin: 0 auto;
+  margin-top: 12rem;
+}
+
+.form {
+  width: 80%;
+  margin: 1rem auto;
+  position: fixed;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: visible;
+}
+
+.popoverButton {
+  background-color: transparent;
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  width: fit-content;
+}
+
+.popoverContent {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  padding-right: 1.2rem;
+  transform: scale(1.2);
+}
+
+.icon {
+  background-image: var(--gradient1);
+  padding: 0.5rem;
+  border-radius: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}

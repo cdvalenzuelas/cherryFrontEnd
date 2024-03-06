@@ -1,0 +1,15 @@
+.header {
+  position: relative;
+  padding: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.logo {
+  background-color: var(--withe);
+  border-radius: 50%;
+  height: 2rem;
+}
+
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+  /* Tus estilos aquí */
+}
