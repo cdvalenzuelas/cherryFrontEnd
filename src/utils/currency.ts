@@ -1,4 +1,10 @@
 export const formatCurency = (money: number) => {
+  // Numero positivo o neganico
+  const sign = money < 0 ? -1 : 1
+  const signText = money < 0 ? '-' : ''
+  money = sign * money
+
+  // Pasar el numero a string
   const stringMoney = String(money)
   let int: number = 0
   let float: number = 0
@@ -20,7 +26,7 @@ export const formatCurency = (money: number) => {
   let internalNumber = int
 
   if (int < 1000) {
-    return `${int}${decimalString}`
+    return `${signText}${int}${decimalString}`
   }
 
   if (int === 1000) {
@@ -37,5 +43,5 @@ export const formatCurency = (money: number) => {
     internalNumber = base
   }
 
-  return `${internalNumber}${intString}${decimalString}`
+  return `${signText}${internalNumber}${intString}${decimalString}`
 }

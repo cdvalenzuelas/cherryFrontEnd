@@ -53,7 +53,7 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
         return cond1 && cond2 && cond3
       }
       )
-      setSearchResults(internalProducts)
+      setSearchResults(internalProducts.sort((a, b) => a.selling_price - b.selling_price))
     } else {
       setSearchResults([])
     }
@@ -76,21 +76,19 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
 
     const newSelectedProducts = [...selectedProducts, selectedProduct]
 
-    const internalSummary: Summary[] = newSelectedProducts.map(item => {
-      return {
-        product_id: item.id,
-        quantity: 1,
-        price: item.selling_price,
-        purchase_price: item.purchase_price,
-        total: item.selling_price * (1 - item.discount),
-        profit: item.selling_price * (1 - item.discount) - item.purchase_price,
-        discount: item.discount,
-        quantityFromDb: item.quantity,
-        invoice: item.invoice
-      }
-    })
+    const internalSummary: Summary = {
+      product_id: selectedProduct.id,
+      quantity: 1,
+      price: selectedProduct.selling_price,
+      purchase_price: selectedProduct.purchase_price,
+      total: selectedProduct.selling_price * (1 - selectedProduct.discount),
+      profit: selectedProduct.selling_price * (1 - selectedProduct.discount) - selectedProduct.purchase_price,
+      discount: selectedProduct.discount,
+      quantityFromDb: selectedProduct.quantity,
+      invoice: selectedProduct.invoice
+    }
 
-    setSummary(internalSummary)
+    setSummary([...summary, internalSummary])
     setSelectedProducts(newSelectedProducts)
   }
 
@@ -145,8 +143,8 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
               color="success"
               onClick={handleProduct}
             >
-              <span>{product.name}</span>
-              <span>$ {formatCurency(product.selling_price)}</span>
+              <span className='flex-grow flex justify-start overflow-hidden whitespace-nowrap'>{product.name}</span>
+              <span className='flex-shrink-0' style={{ fontWeight: 'bold' }}>$ {formatCurency(product.selling_price)}</span>
             </Button>
           ))}
         </Card>
@@ -185,7 +183,7 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
                   startContent={<FontAwesomeIcon icon={faMinus} />}
                 />
               </div>
-              <span>{product.name}</span>
+              <span className='flex-grow text-left'>{product.name}</span>
               <div className='flex flex-col items-end justify-end flex-shrink-0'>
                 <span style={{ color: 'var(--success)' }}>({quantity} x $ {formatCurency(product.selling_price)})</span>
                 <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>$ {formatCurency(product.selling_price * quantity)}</span>
