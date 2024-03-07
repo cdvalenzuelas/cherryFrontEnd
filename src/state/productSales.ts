@@ -1,28 +1,30 @@
-import { type StateCreator, create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { type StateCreator, create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 // *********************TYPES***************//
 
 interface ProductSummary {
-  product_id: string;
-  quantity: number;
-  discount: number;
+  product_id: string
+  quantity: number
+  discount: number
 }
 
 export interface ProductSale {
-  id: number;
-  date: Date;
-  profit: number;
-  total: number;
-  summary: ProductSummary[];
+  id: number
+  date: Date
+  profit: number
+  total: number
+  summary: ProductSummary[]
+  year: number
+  month: number
 }
 
 export interface ProductSaleState {
-  productSales: ProductSale[];
+  productSales: ProductSale[]
 }
 
 interface Actions {
-  setProductSales: (productSales: ProductSale[]) => void;
+  setProductSales: (productSales: ProductSale[]) => void
 }
 
 // *********************STATE***************//
@@ -30,10 +32,10 @@ interface Actions {
 const UserStateApi: StateCreator<ProductSaleState & Actions> = (set, get) => ({
   productSales: [],
   setProductSales: (productSales) => {
-    set({ productSales });
-  },
-});
+    set({ productSales })
+  }
+})
 
 export const useProductSalesState = create<ProductSaleState & Actions>()(
-  devtools(UserStateApi),
-);
+  devtools(UserStateApi)
+)

@@ -13,3 +13,5 @@ export const getDaysBetweenTwoDates = (date1: Date, date2: Date): number => {
 export const formardate = (date: Date): string => {
   return date.toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/Bogota' })
 }
+
+export const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']

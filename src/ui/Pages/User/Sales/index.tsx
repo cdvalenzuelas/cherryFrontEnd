@@ -1,55 +1,49 @@
 // Lib
-import { useState, type MouseEvent } from "react";
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@nextui-org/react";
-import styles from "./styles.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useState, type MouseEvent } from 'react'
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
+import styles from './styles.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-import { Products } from "./Products";
+import { Products } from './Products'
 
 type SalesStage =
-  | "packs"
-  | "products"
-  | "rent"
-  | "kids"
-  | "events"
-  | "privateClass"
-  | "teachers";
+  | 'packs'
+  | 'products'
+  | 'rent'
+  | 'kids'
+  | 'events'
+  | 'privateClass'
+  | 'teachers'
+  | 'summary'
 
 export const Sales = () => {
-  const [popoverIsOpnen, setPopoverIsOpnen] = useState<boolean>(false);
-  const [salesStage, setSalesStage] = useState<SalesStage>("products");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [popoverIsOpnen, setPopoverIsOpnen] = useState<boolean>(false)
+  const [salesStage, setSalesStage] = useState<SalesStage>('products')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name as SalesStage;
+    const name = e.currentTarget.name as SalesStage
 
-    if (name === "packs" || name === "products") {
-      setIsOpen(true);
+    if (name === 'packs' || name === 'products') {
+      setIsOpen(true)
     }
 
-    if (name === "teachers") {
-      setIsOpen(false);
+    if (name === 'teachers') {
+      setIsOpen(false)
     }
 
-    setSalesStage(name);
-    setPopoverIsOpnen(false);
-  };
+    setSalesStage(name)
+    setPopoverIsOpnen(false)
+  }
 
   return (
     <>
-      {salesStage === "products" && (
-        <Products isOpen={isOpen} setIsOpen={setIsOpen} />
-      )}
+      {salesStage === 'products' && <Products isOpen={isOpen} setIsOpen={setIsOpen} />}
 
       <Popover
         onClick={(e) => {
-          setPopoverIsOpnen(false);
+          setPopoverIsOpnen(false)
         }}
         isOpen={popoverIsOpnen}
         defaultOpen={false}
@@ -58,7 +52,7 @@ export const Sales = () => {
         placement="top-end"
         offset={40}
         classNames={{
-          content: [styles.popoverContent],
+          content: [styles.popoverContent]
         }}
       >
         <PopoverTrigger>
@@ -69,11 +63,11 @@ export const Sales = () => {
             variant="shadow"
             isIconOnly
             onClick={(e) => {
-              setPopoverIsOpnen(true);
+              setPopoverIsOpnen(true)
             }}
             radius="full"
             startContent={
-              <FontAwesomeIcon icon={faPlus} style={{ color: "#fff" }} />
+              <FontAwesomeIcon icon={faPlus} style={{ color: '#fff' }} />
             }
             name="open"
           />
@@ -93,5 +87,5 @@ export const Sales = () => {
         </PopoverContent>
       </Popover>
     </>
-  );
-};
+  )
+}

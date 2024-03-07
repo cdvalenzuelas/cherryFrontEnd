@@ -1,8 +1,0 @@
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  position: relative;
-  overflow: visible;
-  padding: 1rem;
-}

@@ -1,34 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Libs
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 // Componets
-import type { ProductSale, Salary } from "@state";
+import type { Salary } from '@state'
 
-const supabase = createClientComponentClient();
+const supabase = createClientComponentClient()
 
-interface NewSalary {
-  date: Date;
-  amount: number;
-}
+export const createSalary = async ({ date, amount, year, month }: Salary): Promise<Salary[]> => {
+  const newDate = new Date(date)
 
-export const createSalary = async (newSalary: NewSalary): Promise<Salary[]> => {
+  newDate.setDate(newDate.getDate() + 1)
+
   try {
     // Voy a insertar el plan
     const { data, error } = await supabase
-      .from("salary")
-      .insert(newSalary)
-      .select();
+      .from('salary')
+      .insert({ date: newDate, amount, year, month })
+      .select('*')
+
+    const salary = data as Salary[]
 
     // Si hay un error lanzar error
-    if (data.length === 0 || data === null) {
-      throw new Error();
+    if (salary.length === 0 || salary === null) {
+      throw new Error()
     } else if (error !== null) {
-      throw new Error();
+      throw new Error()
     }
 
-    return data as Salary[];
+    return data as Salary[]
   } catch {
-    return [];
+    return []
   }
-};
+}

@@ -1,27 +1,25 @@
-"use client";
+'use client'
 
 // Lib
-import { type MouseEvent } from "react";
-import { Button } from "@nextui-org/react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { type MouseEvent } from 'react'
+import { Button } from '@nextui-org/react'
+import Link from 'next/link'
 
 // Componets
-import { useUsersStage, type UserStageType } from "@state";
-import styles from "./styles.module.css";
-import { ProfileIcon } from "@/app/ProfileIcon";
-import { SalesIcon } from "@/app/SalesIcon";
+import { useUsersStage, type UserStageType } from '@state'
+import styles from './styles.module.css'
+import { SalesIcon } from '@/app/SalesIcon'
+import { ClassIcon } from '@/app/ClassIcon'
 
 export const Header = () => {
-  const setUserStage = useUsersStage((state) => state.setUserStage);
-  const userStage = useUsersStage((state) => state.userStage);
-  const pathName = usePathname();
+  const setUserStage = useUsersStage(state => state.setUserStage)
+  const userStage = useUsersStage(state => state.userStage)
 
   // CLICK
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name as UserStageType;
-    setUserStage(name);
-  };
+    const name = e.currentTarget.name as UserStageType
+    setUserStage(name)
+  }
 
   return (
     <header className={`flex flex-col gap-2 ${styles.header}`}>
@@ -31,16 +29,17 @@ export const Header = () => {
         </Link>
 
         <Button
-          startContent={<ProfileIcon color="#94a3b8" />}
           size="md"
-          radius="none"
           color="secondary"
           variant="light"
-          name="home"
+          onClick={handleClick}
+          startContent={
+            <ClassIcon color={userStage === 'reports' ? '#009cd3' : '#94a3b8'} />
+          }
+          radius="none"
+          name='reports'
           isIconOnly
-          as={Link}
-          href="/"
-          className={pathName !== "/user" ? "mobileHide" : ""}
+          style={{ borderBottom: userStage === 'reports' ? '2px solid #009cd3' : 'none' }}
         />
 
         <Button
@@ -49,17 +48,13 @@ export const Header = () => {
           variant="light"
           onClick={handleClick}
           startContent={
-            <SalesIcon color={userStage === "sales" ? "#009cd3" : "#94a3b8"} />
+            <SalesIcon color={userStage === 'sales' ? '#009cd3' : '#94a3b8'} />
           }
           radius="none"
           name="sales"
           isIconOnly
-          style={{
-            borderBottom: userStage === "sales" ? "2px solid #009cd3" : "none",
-          }}
-          className={pathName !== "/user" ? "mobileHide" : ""}
-        />
+          style={{ borderBottom: userStage === 'sales' ? '2px solid #009cd3' : 'none' }} />
       </nav>
     </header>
-  );
-};
+  )
+}

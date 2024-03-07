@@ -1,5 +1,4 @@
 import type { Dispatch, FC, SetStateAction, MouseEvent } from 'react'
-import { ProductsAccordeon } from './ProductsAccordeon'
 import { NewSaleModal } from './NewSaleModal.tsx'
 
 interface Props {
@@ -17,8 +16,6 @@ export const Products: FC<Props> = ({ isOpen, setIsOpen }) => {
 
   return <>
     <h1>Productos</h1>
-
-    <ProductsAccordeon />
 
     {isOpen && <NewSaleModal
       isOpen={true}

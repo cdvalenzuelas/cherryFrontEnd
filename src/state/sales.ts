@@ -21,6 +21,12 @@ export interface Sale {
   total_price: number
   name: string
 }
+export interface SalesReport {
+  year: number
+  month: number
+  total: number
+  profit: number
+}
 
 export interface SaleFromDb extends Omit<Sale, 'sale_date' | 'start_date' | 'end_date'> {
   sale_date: string

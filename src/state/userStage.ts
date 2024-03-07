@@ -2,7 +2,7 @@ import { type StateCreator, create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 // *********************TYPES***************//
-export type UserStageType = 'info' | 'papers' | 'classes' | 'book' | 'renew' | 'schedule' | 'sales' | 'packs'
+export type UserStageType = 'reports' | 'sales'
 
 interface UserStage {
   userStage: UserStageType
@@ -15,7 +15,7 @@ interface Actions {
 // *********************STATE***************//
 
 const UserStateApi: StateCreator<UserStage & Actions> = (set, get) => ({
-  userStage: 'info',
+  userStage: 'reports',
   setUserStage: (userStage) => {
     set({ userStage })
   }
