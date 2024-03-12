@@ -34,9 +34,7 @@ const UserStateApi: StateCreator<SalariesState & Actions> = (set, get) => ({
     set({ salaries })
   },
   addSalary: (salary) => {
-    const newDate = new Date(salary.date)
-
-    newDate.setDate(newDate.getDate() + 1)
+    console.log(salary)
 
     set({ salaries: [...get().salaries, salary] })
   }

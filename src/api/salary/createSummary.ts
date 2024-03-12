@@ -10,8 +10,6 @@ const supabase = createClientComponentClient()
 export const createSalary = async ({ date, amount, year, month }: Salary): Promise<Salary[]> => {
   const newDate = new Date(date)
 
-  newDate.setDate(newDate.getDate() + 1)
-
   try {
     // Voy a insertar el plan
     const { data, error } = await supabase
