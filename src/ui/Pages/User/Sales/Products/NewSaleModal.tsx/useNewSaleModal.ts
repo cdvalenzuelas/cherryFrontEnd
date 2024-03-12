@@ -73,10 +73,6 @@ export const useNewSaleModal = (setIsOpen: Dispatch<SetStateAction<boolean>>) =>
     })
 
     const salaryIsOk = salaries.some(item => {
-      console.log('-----------------')
-      console.log(String(item.date), date)
-      console.log(String(item.date) === date)
-
       return String(item.date) === date
     })
 
