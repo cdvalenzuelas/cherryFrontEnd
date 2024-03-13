@@ -1,10 +1,9 @@
 import { type Product, useProductsState } from '@state'
-import { Input, Button, Card, Divider } from '@nextui-org/react'
+import { Input, Button, Card, Divider, Chip } from '@nextui-org/react'
 import { useState, type ChangeEvent, type MouseEvent, type FC, useEffect } from 'react'
 import styles from './styles.module.css'
 import { formatCurency } from '@/utils/currency'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { QuantityController } from './QuantityController'
 
 interface Summary {
   product_id: string
@@ -113,7 +112,14 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
     filteredsummary.total = internalQuantity * price * (1 - discount)
     filteredsummary.profit = internalQuantity * (price * (1 - discount) - purchasePrice)
 
-    setSummary([...notFilteredsummary, filteredsummary])
+    // si la cantidad en 0 eliminarlo del sumario y del summary y de los elementos seleccionados
+    if (internalQuantity === 0) {
+      const internalSelectedProducts = selectedProducts.filter(item => item.id !== filteredsummary.product_id)
+      setSelectedProducts(internalSelectedProducts)
+      setSummary(notFilteredsummary)
+    } else {
+      setSummary([...notFilteredsummary, filteredsummary])
+    }
   }
 
   return (
@@ -124,7 +130,7 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
         type="text"
         label="Productos"
         placeholder="Agregar Productos"
-        className="relavite"
+        className="relavite mb-2"
         name="estudiantes"
         autoComplete="off"
         onChange={handleChange}
@@ -150,50 +156,39 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
         </Card>
       )}
 
+      {selectedProducts.length > 0 && <Divider />}
+
       {selectedProducts.map((product) => {
         const { quantity } = summary.find(item => item.product_id === product.id) as Summary
 
-        return (
+        return (<>
+
           <div key={product.id} className="flex py-1 px-1 h-max mt-3" style={{ fontSize: '0.8rem' }}>
             <div className="flex flex-row items-center justify-between align-middle py-1 w-full gap-3">
-              <div className="flex gap-2 items-center">
-                <Button
-                  isIconOnly
-                  size="sm"
-                  color="secondary"
-                  radius="full"
-                  name="more"
-                  onClick={(e) => {
-                    handleIncreaseDecrease(e, product.id)
-                  }}
-                  isDisabled={quantity === product.quantity}
-                  startContent={<FontAwesomeIcon icon={faPlus} />}
-                />
-                <span>{quantity}</span>
-                <Button
-                  isIconOnly
-                  size="sm"
-                  color="secondary"
-                  radius="full"
-                  name="less"
-                  onClick={(e) => {
-                    handleIncreaseDecrease(e, product.id)
-                  }}
-                  isDisabled={quantity === 0}
-                  startContent={<FontAwesomeIcon icon={faMinus} />}
-                />
+
+              <QuantityController quantity={quantity} product={product} handleIncreaseDecrease={handleIncreaseDecrease} />
+
+              <div className='flex-grow text-left flex gap-2 items-center h-full'>
+                <b>({quantity})</b>
+                <div className='flex-shrink flex flex-col'>
+                  <span>{product.name}</span>
+                  <Chip size='sm' variant='flat' color='warning'>{product.area}</Chip>
+                </div>
               </div>
-              <span className='flex-grow text-left'>{product.name}</span>
+
               <div className='flex flex-col items-end justify-end flex-shrink-0'>
                 <span style={{ color: 'var(--success)' }}>({quantity} x $ {formatCurency(product.selling_price)})</span>
                 <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>$ {formatCurency(product.selling_price * quantity)}</span>
               </div>
+
             </div>
           </div>
+
+          <Divider />
+        </>
         )
       })}
 
-      {selectedProducts.length > 0 && <Divider />}
     </div>
   )
 }

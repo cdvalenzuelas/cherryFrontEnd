@@ -32,15 +32,17 @@ export const NewSaleModal: FC<Props> = ({ isOpen, handleOpen, setIsOpen }) => {
           <Input type="date" value={date} onChange={handleDateChange} />
           <SearchProducts getSummary={getSummary} />
 
-          <div className='flex justify-between items-center h-full'>
-            <span>Total</span>
-            <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>$ {formatCurency(total)}</span>
-          </div>
+          {total > 0 && <>
+            <div className='flex justify-between items-center h-full'>
+              <span>Total</span>
+              <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>$ {formatCurency(total)}</span>
+            </div>
 
-          <div className='flex justify-between items-center h-full'>
-            <span>Cantidad</span>
-            <span>{quantity} Elementos</span>
-          </div>
+            <div className='flex justify-between items-center h-full'>
+              <span>Cantidad</span>
+              <span>{quantity} Elementos</span>
+            </div>
+          </>}
 
         </ModalBody>
 
