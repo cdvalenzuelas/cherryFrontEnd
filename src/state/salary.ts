@@ -34,8 +34,6 @@ const UserStateApi: StateCreator<SalariesState & Actions> = (set, get) => ({
     set({ salaries })
   },
   addSalary: (salary) => {
-    console.log(salary)
-
     set({ salaries: [...get().salaries, salary] })
   }
 })

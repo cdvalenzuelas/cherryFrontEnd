@@ -1,0 +1,40 @@
+.button {
+  position: absolute;
+  bottom: 4rem;
+  height: 5rem !important;
+  width: 5rem !important;
+  border-radius: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: visible;
+  z-index: 150;
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  height: 6rem !important;
+  width: 6rem !important;
+  border-radius: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  border: solid var(--danger) 0.3rem;
+}
+
+.actions {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  position: absolute;
+  bottom: -7rem;
+  left: 50%;
+  height: 4rem !important;
+  transform: translateX(-50%);
+}
+
+.actionButtons {
+  height: 4rem !important;
+  width: 4rem !important;
+  border-radius: 100%;
+}

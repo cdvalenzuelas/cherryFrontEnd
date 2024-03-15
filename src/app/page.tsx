@@ -8,6 +8,7 @@ import { Header } from '@/ui/Global/Header'
 import { useProductsState, useInvoicesState, useSalaryState, useUsersStage } from '@state'
 import { Sales } from '@/ui/Pages/User/Sales'
 import { Reports } from '@/ui/Pages/User/Reports'
+import { WareHouse } from '@/ui/Pages/User/WareHouse'
 import { getProducts, getInvoices, getSalary } from '@/api'
 
 export default function User() {
@@ -35,6 +36,7 @@ export default function User() {
         <main className="flex-1 overflow-auto bg-slate-100">
           {userStage === 'sales' && <Sales />}
           {userStage === 'reports' && <Reports />}
+          {userStage === 'wareHause' && <WareHouse />}
         </main>
       </div>
     </div>

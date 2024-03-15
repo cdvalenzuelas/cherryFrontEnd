@@ -12,7 +12,6 @@ export const getProducts = async (): Promise<Product[]> => {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .gt('quantity', 0)
 
     // Si no viene data o hay unerror lazar error
     if (data === null || data.length === 0) {

@@ -42,7 +42,7 @@ export const QuantityController: FC<Props> = ({ quantity, product, handleIncreas
       />
     </div>
 
-    {product.image !== null && <div style={{ height: '4rem', width: '4rem', border: '2px solid var(--blue2)', borderRadius: '0.5rem' }}>
+    {product.image !== null && <div style={{ height: '4rem', width: '4rem' }}>
       <Image
         src={product.image}
         alt='prodictImage'

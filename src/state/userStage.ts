@@ -2,7 +2,7 @@ import { type StateCreator, create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 // *********************TYPES***************//
-export type UserStageType = 'reports' | 'sales'
+export type UserStageType = 'reports' | 'sales' | 'wareHause'
 
 interface UserStage {
   userStage: UserStageType

@@ -7,7 +7,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Sky Dance',
-  description: 'Controla tus clases'
+  description: 'Controla tus clases',
+  manifest: '/manifest.json',
+  icons: {
+    apple: '/logo.png'
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

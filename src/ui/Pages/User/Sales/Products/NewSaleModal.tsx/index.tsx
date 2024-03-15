@@ -29,7 +29,7 @@ export const NewSaleModal: FC<Props> = ({ isOpen, handleOpen, setIsOpen }) => {
         <ModalHeader>Registrar Nueva Venta de Productos</ModalHeader>
 
         <ModalBody>
-          <Input type="date" value={date} onChange={handleDateChange} />
+          {/* <Input type="date" value={date} onChange={handleDateChange} /> */}
           <SearchProducts getSummary={getSummary} />
 
           {total > 0 && <>

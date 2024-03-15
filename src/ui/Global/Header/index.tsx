@@ -10,6 +10,7 @@ import { useUsersStage, type UserStageType } from '@state'
 import styles from './styles.module.css'
 import { SalesIcon } from '@/app/SalesIcon'
 import { ClassIcon } from '@/app/ClassIcon'
+import { WareHouseIcon } from '@/app/WareHauseIcon'
 
 export const Header = () => {
   const setUserStage = useUsersStage(state => state.setUserStage)
@@ -41,6 +42,19 @@ export const Header = () => {
           isIconOnly
           style={{ borderBottom: userStage === 'reports' ? '2px solid #009cd3' : 'none' }}
         />
+
+        <Button
+          size="md"
+          color="secondary"
+          variant="light"
+          onClick={handleClick}
+          startContent={
+            <WareHouseIcon color={userStage === 'wareHause' ? '#009cd3' : '#94a3b8'} />
+          }
+          radius="none"
+          name="wareHause"
+          isIconOnly
+          style={{ borderBottom: userStage === 'wareHause' ? '2px solid #009cd3' : 'none' }} />
 
         <Button
           size="md"

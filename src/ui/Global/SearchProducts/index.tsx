@@ -4,6 +4,7 @@ import { useState, type ChangeEvent, type MouseEvent, type FC, useEffect } from 
 import styles from './styles.module.css'
 import { formatCurency } from '@/utils/currency'
 import { QuantityController } from './QuantityController'
+import Image from 'next/image'
 
 interface Summary {
   product_id: string
@@ -148,6 +149,30 @@ export const SearchProducts: FC<Props> = ({ getSummary }) => {
               className="h-12 flex items-center justify-between px-5 gap-3"
               color="success"
               onClick={handleProduct}
+              startContent={<>
+                {(product.image !== null || product.image === "''") && <div
+                  style={{ height: '2rem', width: '2rem' }}>
+                  <Image
+                    src={product.image}
+                    alt='prodictImage'
+                    width={100}
+                    height={100}
+                    style={{ height: '2rem', width: '2rem', borderRadius: '0.5rem' }}
+                  />
+                </div>}
+
+                {product.image === null && <div
+                  className='flex-shrink-0'
+                  style={{ height: '2rem', width: '2rem', border: '2px solid var(--blue2)', borderRadius: '0.5rem' }}>
+                  <Image
+                    src='/image_placeholder.png'
+                    alt='prodictImage'
+                    width={100}
+                    height={100}
+                    style={{ height: '2rem', width: '2rem', borderRadius: '0.5rem' }}
+                  />
+                </div>}
+              </>}
             >
               <span className='flex-grow flex justify-start overflow-hidden whitespace-nowrap'>{product.name}</span>
               <span className='flex-shrink-0' style={{ fontWeight: 'bold' }}>$ {formatCurency(product.selling_price)}</span>

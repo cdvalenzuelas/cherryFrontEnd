@@ -30,6 +30,7 @@ export interface ProductState {
 interface Actions {
   setProducts: (products: Product[]) => void
   updateProductsQuantity: (productsToUpdate: ProductsToUpdate[]) => void
+  updateProductImage: (productId: string, productImage: string) => void
 }
 
 // *********************STATE***************//
@@ -47,6 +48,13 @@ const UserStateApi: StateCreator<ProductState & Actions> = (set, get) => ({
       product.quantity = item.quantity
       set({ products: [product, ...restOfProducts] })
     })
+  },
+  updateProductImage: (productId, productImage) => {
+    const product = get().products.find(product => product.id === productId) as Product
+    const filteredProducts = get().products.filter(product => product.id !== productId)
+
+    product.image = productImage
+    set({ products: [product, ...filteredProducts] })
   }
 })
 
