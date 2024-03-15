@@ -6,16 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { Products } from './Products'
+import { Invoices } from './Invoices'
 
-type SalesStage =
-  | 'packs'
-  | 'products'
-  | 'rent'
-  | 'kids'
-  | 'events'
-  | 'privateClass'
-  | 'teachers'
-  | 'summary'
+type SalesStage = 'invoices' | 'products'
 
 export const Sales = () => {
   const [popoverIsOpnen, setPopoverIsOpnen] = useState<boolean>(false)
@@ -25,12 +18,8 @@ export const Sales = () => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as SalesStage
 
-    if (name === 'packs' || name === 'products') {
+    if (name === 'products' || name === 'invoices') {
       setIsOpen(true)
-    }
-
-    if (name === 'teachers') {
-      setIsOpen(false)
     }
 
     setSalesStage(name)
@@ -40,6 +29,7 @@ export const Sales = () => {
   return (
     <>
       {salesStage === 'products' && <Products isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {salesStage === 'invoices' && <Invoices isOpen={isOpen} setIsOpen={setIsOpen} />}
 
       <Popover
         onClick={(e) => {
@@ -74,16 +64,29 @@ export const Sales = () => {
         </PopoverTrigger>
 
         <PopoverContent>
+
           <div className="flex flex-col items-end">
+
+            <Button
+              size="lg"
+              className={styles.popoverButton}
+              name="invoices"
+              onClick={handleClick}
+            >
+              Invoices <div className={styles.icon}>📄</div>
+            </Button>
+
             <Button
               size="lg"
               className={styles.popoverButton}
               name="products"
               onClick={handleClick}
             >
-              Productos <div className={styles.icon}>💄</div>
+              Ventas <div className={styles.icon}>💄</div>
             </Button>
+
           </div>
+
         </PopoverContent>
       </Popover>
     </>
