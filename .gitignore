@@ -1,0 +1,42 @@
+# Dependencias
+/node_modules/
+node_modules
+node_modules/
+/node_modules
+.next
+.next/
+/.next
+
+# Carpetas de construcción
+/.next/
+/out/
+/build/
+
+# Archivos de configuración de entorno
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos generados durante la ejecución
+.next/cache
+coverage/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos y carpetas opcionales que podrías querer ignorar
+.npm
+.yarn
+.pnpm-store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

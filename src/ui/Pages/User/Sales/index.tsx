@@ -15,11 +15,17 @@ export const Sales = () => {
   const [salesStage, setSalesStage] = useState<SalesStage>('products')
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
+  console.log('hola')
+
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as SalesStage
 
-    if (name === 'products' || name === 'invoices') {
+    if (name === 'products') {
       setIsOpen(true)
+    }
+
+    if (name === 'invoices') {
+      setIsOpen(false)
     }
 
     setSalesStage(name)
@@ -29,7 +35,7 @@ export const Sales = () => {
   return (
     <>
       {salesStage === 'products' && <Products isOpen={isOpen} setIsOpen={setIsOpen} />}
-      {salesStage === 'invoices' && <Invoices isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {salesStage === 'invoices' && <Invoices />}
 
       <Popover
         onClick={(e) => {
@@ -71,9 +77,10 @@ export const Sales = () => {
               size="lg"
               className={styles.popoverButton}
               name="invoices"
+
               onClick={handleClick}
             >
-              Invoices <div className={styles.icon}>📄</div>
+              Facturas <div className={styles.icon}>📄</div>
             </Button>
 
             <Button

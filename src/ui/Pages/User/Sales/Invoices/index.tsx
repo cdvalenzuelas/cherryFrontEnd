@@ -1,131 +1,143 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type Dispatch, type FC, type SetStateAction, type MouseEvent, useEffect, useState } from 'react'
+import { type MouseEvent, useState, useEffect } from 'react'
 import { NewSaleModal } from './NewSaleModal'
-import { type ProductSale } from '@/state/productSales.js'
-import { Accordion, AccordionItem, Button, Card, CardBody, CardHeader, Divider, Progress } from '@nextui-org/react'
-import { formatCurency } from '@/utils/currency'
-import { useInvoicesState, useProductsState } from '@/state'
-import Image from 'next/image'
+import { Button, Chip } from '@nextui-org/react'
+import { Invoice, Product, useInvoicesState, useProductsState } from '@/state'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan, faFloppyDisk, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Reports } from './Reports'
+import { AddProducts } from './AddProducts'
+import { NewInvoice } from './NewInvoice'
+import { createInvoice } from '@/api'
 
-interface Props {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-}
+type InvoiceStep = 'report' | 'newInvoice' | 'addProducts'
 
-export const Invoices: FC<Props> = ({ isOpen, setIsOpen }) => {
+export const Invoices = () => {
   const invoices = useInvoicesState(state => state.invoices)
   const products = useProductsState(state => state.products)
 
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [newProducts, setNewProducts] = useState<Product[]>([])
+  const [invoice, setInvoice] = useState<Invoice>({
+    id: 1,
+    name: '',
+    date: new Date(),
+    reference: '',
+    provider: '',
+    total: 0,
+    total_selling: 0,
+    recovered_money: 0,
+    owner: 'cristian'
+  })
+
+  const [invoiceStep, setInvoiceStep] = useState<InvoiceStep>('report')
+
+  useEffect(() => {
+    if (invoiceStep === 'report') {
+      setInvoice({
+        id: 1,
+        name: '',
+        date: new Date(),
+        reference: '',
+        provider: '',
+        total: 0,
+        total_selling: 0,
+        recovered_money: 0,
+        owner: 'cristian'
+      })
+      setNewProducts([])
+    }
+  }, [invoiceStep])
+
   invoices.sort((a, b) => (a.recovered_money / a.total) - (b.recovered_money / b.total))
 
-  // const sales = useSalesState(state => state.sales)
-  const handleOpen = (e: MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name as 'open' | 'close'
-
-    setIsOpen(name === 'open')
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    try {
+      const newInvoice = await createInvoice(invoice, newProducts)
+      setInvoiceStep('report')
+    } catch (error) {
+      setInvoiceStep('report')
+    }
   }
 
   return <>
-    <h1>Facturas</h1>
+    <header className='flex flex-col justify-start items-start w-full'>
 
-    <ul className='flex flex-col gap-3 px-5' style={{ marginBottom: '7rem' }}>
-      {invoices.map(invoice => {
-        const progress = 100 * invoice.recovered_money / invoice.total
-        const internalProducts = products.filter(product => product.invoice === invoice.name)
-        internalProducts.sort((a, b) => a.selling_price - b.selling_price)
+      <div className='w-full flex flex-row items-center justify-between px-5'>
+        {invoiceStep === 'report' && <h1>Facturas</h1>}
+        {invoiceStep === 'newInvoice' && <h1>Factura</h1>}
+        {invoiceStep === 'addProducts' && <h1>Productos</h1>}
 
-        return <Card key={invoice.id} className='px-5 py-3'>
-          <CardHeader className='flex items-center justify-between'>
-            <span style={{ fontWeight: 'bolder', color: 'var(--success)' }}>{invoice.provider}</span>
-            <span style={{ fontWeight: 'bolder', color: 'var(--warning)' }}>{invoice.reference}</span>
-          </CardHeader>
+        <div className='flex gap-2 items-center justify-between'>
+          {invoiceStep === 'report' && <Button
+            size='sm'
+            color='success'
+            onClick={e => { setInvoiceStep('newInvoice') }}>
+            Nueva Factura
+          </Button>}
 
-          <CardBody className='flex flex-col gap-3'>
+          {invoiceStep === 'newInvoice' && <Button
+            isDisabled={invoice.name === '' || invoice.provider === '' || invoice.reference === ''}
+            size='sm'
+            color='primary'
+            onClick={e => { setInvoiceStep('addProducts') }}>
+            Crear productos
+          </Button>}
 
-            <div className='flex items-center justify-between'>
-              <span>$ {formatCurency(invoice.total)}</span>
-              <span>$ {formatCurency(invoice.recovered_money)}</span>
-              <span
-                style={{ fontWeight: 'bolder', color: progress < 100 ? 'var(--danger)' : 'var(--success)' }}>
-                $ {formatCurency(invoice.recovered_money - invoice.total)}
-              </span>
-            </div>
+          {invoiceStep === 'addProducts' && <Button
+            isIconOnly
+            size='sm'
+            color='primary'
+            startContent={<FontAwesomeIcon icon={faPlus} color='#fff' />}
+            onClick={e => { setIsOpen(true) }} />}
 
-            <Progress
-              size='sm'
-              color={progress < 100 ? 'warning' : 'success'}
-              aria-label="Loading..."
-              value={progress}
-              className="max-w-md"
-            />
+          {invoiceStep === 'addProducts' && <Button
+            isDisabled={newProducts.length === 0}
+            isIconOnly
+            size='sm'
+            color='success'
+            startContent={<FontAwesomeIcon icon={faFloppyDisk} color='#fff' />}
+            onClick={handleSubmit} />}
 
-            <Accordion>
-              <AccordionItem title='Productos'>
-                {internalProducts.map(product => {
-                  const imageIsNull = product.image === null || product.image === "''"
+          {(invoiceStep === 'newInvoice' || invoiceStep === 'addProducts') && <Button
+            isIconOnly
+            size='sm'
+            color='danger'
+            startContent={<FontAwesomeIcon icon={faTrashCan} color='#fff' />}
+            onClick={e => { setInvoiceStep('report') }} />}
+        </div>
 
-                  return <Button
-                    variant='light'
-                    key={product.id}
-                    color={product.quantity > 0 ? 'success' : 'warning'}
-                    className='w-full flex h-fit py-3 px-0 gap-3 items-center justify-start'
-                    style={{ backgroundColor: 'transparent' }}
-                  >
-                    {!imageIsNull && <div
-                      style={{ height: '3rem', width: '3rem' }}
-                      className='flex-shrink-0'>
-                      <Image
-                        src={product.image}
-                        alt='prodictImage'
-                        width={100}
-                        height={100}
-                        style={{ borderRadius: '0.5rem' }}
-                      />
-                    </div>}
+      </div>
 
-                    {imageIsNull && <div
-                      style={{ height: '3rem', width: '3rem', border: '1px solid var(--blue2)', borderRadius: '0.5rem', backgroundColor: 'var(--gray1)' }}
-                      className='flex-shrink-0'>
-                      <Image
-                        src='/image_placeholder.png'
-                        alt='prodictImage'
-                        width={100}
-                        height={100}
-                        style={{ height: '3rem', width: '3rem', borderRadius: '0.5rem' }}
-                      />
+      {(invoiceStep === 'newInvoice' || invoiceStep === 'addProducts') && <div className='flex flex-row items-center justify-start gap-2 px-5'>
+        <Chip size='sm' color='warning'>P. Compra: {newProducts.reduce((a, b) => a + b.purchase_price, 0)}</Chip>
+        <Chip size='sm' color='success'>P. Venta: {newProducts.reduce((a, b) => a + b.selling_price, 0)}</Chip>
+        <Chip size='sm' color='secondary'>{newProducts.reduce((a, b) => a + b.quantity, 0)} unidades</Chip>
+      </div>}
 
-                    </div>}
+    </header>
 
-                    <div className='flex flex-col gap-2 items-start w-full overflow-hidden'>
+    {invoiceStep === 'report' && <Reports
+      invoices={invoices}
+      products={products}
+    />}
 
-                      <span
-                        style={{ fontWeight: 'bold', fontSize: '1rem' }}>
-                        {product.name}
-                      </span>
+    {invoiceStep === 'newInvoice' && <NewInvoice
+      invoice={invoice}
+      setInvoice={setInvoice}
+    />}
 
-                      {product.quantity > 1 && <span>{product.quantity} unidades disponibles</span>}
-                      {product.quantity <= 0 && <span>Agotado</span>}
-                      {product.quantity === 1 && <span>Una (1) unidad disponible</span>}
-
-                      <span style={{ fontWeight: 'bold' }}>$ {formatCurency(product.selling_price)}</span>
-
-                    </div>
-
-                  </Button>
-                })}
-              </AccordionItem>
-            </Accordion>
-
-          </CardBody>
-
-        </Card>
-      })}
-    </ul>
+    {invoiceStep === 'addProducts' && <AddProducts
+      products={newProducts}
+      setProducts={setNewProducts}
+    />}
 
     {isOpen && <NewSaleModal
+      invoice={invoice}
+      newProducts={newProducts}
       isOpen={true}
-      handleOpen={handleOpen}
       setIsOpen={setIsOpen}
+      setNewProducts={setNewProducts}
     />}
   </>
 }

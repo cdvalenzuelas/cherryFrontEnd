@@ -11,6 +11,8 @@ export interface Invoice {
   date: Date
   total: number
   recovered_money: number
+  total_selling: number
+  owner: 'cristian' | 'cherry'
 }
 
 interface InvoicesToUpdate {

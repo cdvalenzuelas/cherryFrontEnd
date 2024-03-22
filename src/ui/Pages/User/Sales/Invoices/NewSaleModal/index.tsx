@@ -1,80 +1,147 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Libs
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Card, CardBody, Chip, Select, SelectItem, type Selection } from '@nextui-org/react'
-import { type ChangeEvent, useState, type Dispatch, type FC, type MouseEvent, type SetStateAction } from 'react'
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Card, CardBody, Chip } from '@nextui-org/react'
+import { useState, type Dispatch, type FC, type MouseEvent, type SetStateAction, ChangeEvent } from 'react'
 import style from './styles.module.css'
-import { useInvoicesState } from '@/state'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Invoice, Product, useProductsState } from '@/state'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 interface Props {
+  invoice: Invoice
+  newProducts: Product[]
   isOpen: boolean
-  handleOpen: (e: MouseEvent<HTMLButtonElement>) => void
   setIsOpen: Dispatch<SetStateAction<boolean>>
+  setNewProducts: Dispatch<SetStateAction<Product[]>>
 }
 
-export const NewSaleModal: FC<Props> = ({ isOpen, handleOpen, setIsOpen }) => {
-  const invoices = useInvoicesState(state => state.invoices)
+type Name = 'name' | 'reference' | 'quantity' | 'purchase_price' | 'selling_price' | 'area' | 'type'
 
-  const [provider, setProvider] = useState<string>('')
-  const [reference, setReference] = useState<string>('')
-  const [searchedProviders, setSearchedProviders] = useState<string[]>([])
-  const [selectedPrivider, setSelectedProvider] = useState<string | null>(null)
-  const [date, setDate] = useState<string>(() => {
-    const newDate = new Date()
-    const month = newDate.getMonth() + 1 < 10 ? `0${newDate.getMonth() + 1}` : `${newDate.getMonth() + 1}`
-    const day = newDate.getDate() < 10 ? `0${newDate.getDate()}` : `${newDate.getDate()}`
+export const NewSaleModal: FC<Props> = ({ isOpen, setIsOpen, setNewProducts, invoice, newProducts }) => {
+  const stateProducts = useProductsState(state => state.products)
 
-    return `${newDate.getFullYear()}-${month}-${day}`
+  const areas = [...new Set(stateProducts.map(item => item.area))]
+  const types = [...new Set(stateProducts.map(item => item.type).flat())]
+
+  const [searchArea, setSearchArea] = useState<string>('')
+  const [searchedArea, setSearchedArea] = useState<string[]>([])
+  const [searchType, setSearchType] = useState<string>('')
+  const [searchedType, setSearchedType] = useState<string[]>([])
+  const [product, setProduct] = useState<Product>(() => {
+
+    const date = new Date()
+
+    return {
+      id: date.toLocaleTimeString(),
+      name: '',
+      invoice: invoice.name,
+      selling_price: 0,
+      purchase_price: 0,
+      discount: 0,
+      quantity: 0,
+      area: '',
+      type: [],
+      image: "''",
+      reference: '',
+      created_at: date
+    }
   })
-  const [owner, setOwner] = useState<Selection>(new Set(['cristian']))
-
-  const providers = [...new Set(invoices.map(invoice => invoice.provider))]
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name as 'provider' | 'date' | 'reference'
-    const value = e.target.value.toUpperCase()
-
-    if (name === 'provider') {
-      setProvider(value)
-
-      if (value.length > 3) {
-        const internalProviders = providers.filter(provider => provider.includes(value))
-
-        if (providers.includes(value)) {
-          setSearchedProviders(internalProviders)
-        } else {
-          setSearchedProviders([...internalProviders, value])
-        }
-      } else {
-        setSearchedProviders([])
-      }
-    }
-
-    if (name === 'reference') {
-      setReference(value)
-    }
-  }
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setNewProducts([...newProducts, product])
+    setIsOpen(false)
+  }
+
+  const handleArea = (e: MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as 'select' | 'delete'
     const value = e.currentTarget.value.toUpperCase()
 
     if (name === 'select') {
-      setSelectedProvider(value)
+      setSearchArea('')
+      setProduct({
+        ...product,
+        area: value
+      })
     }
 
     if (name === 'delete') {
-      setSelectedProvider(null)
+      setSearchArea('')
+      setProduct({
+        ...product,
+        area: ''
+      })
     }
 
-    setProvider('')
-    setSearchedProviders([])
+    setSearchedArea([])
   }
 
-  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setDate(value)
+  const handleType = (e: MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name as 'select' | 'delete'
+    const value = e.currentTarget.value.toUpperCase()
+
+    if (name === 'select') {
+      setSearchType('')
+      setProduct({
+        ...product,
+        type: [...product.type, value]
+      })
+    }
+
+    if (name === 'delete') {
+      setSearchType('')
+      setProduct({
+        ...product,
+        type: product.type.filter(item => item !== value)
+      })
+    }
+
+    setSearchedType([])
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name as Name
+    const value = e.currentTarget.value.toUpperCase()
+
+    if (['name', 'reference'].includes(name)) {
+      setProduct({ ...product, [name]: e.target.value.toUpperCase() })
+    }
+
+    if (['quantity', 'purchase_price', 'selling_price'].includes(name)) {
+      setProduct({ ...product, [name]: Number(e.target.value) })
+    }
+
+    if (name === 'area') {
+      setSearchArea(value)
+
+      if (value.length > 3) {
+        const internalAreas = areas.filter(area => area.includes(value))
+
+        if (areas.includes(value)) {
+          setSearchedArea(internalAreas)
+        } else {
+          setSearchedArea([...internalAreas, value])
+        }
+      } else {
+        setSearchedArea([])
+      }
+    }
+
+    if (name === 'type') {
+      setSearchType(value)
+
+      if (value.length > 3) {
+        const internalAreas = types.filter(area => area.includes(value))
+
+        if (types.includes(value)) {
+          setSearchedType(internalAreas)
+        } else {
+          setSearchedType([...internalAreas, value])
+        }
+      } else {
+        setSearchedType([])
+      }
+    }
   }
 
   return (
@@ -90,102 +157,203 @@ export const NewSaleModal: FC<Props> = ({ isOpen, handleOpen, setIsOpen }) => {
 
         <ModalBody className='flex flex-col'>
 
+          <Input
+            autoComplete="off"
+            size="sm"
+            variant='bordered'
+            color={product.name === '' ? 'danger' : 'secondary'}
+            type="text"
+            name='name'
+            label="Nombre"
+            placeholder="Nombre del producto"
+            value={product.name}
+            onChange={handleChange}
+          />
+
+          <Input
+            autoComplete="off"
+            size="sm"
+            variant='bordered'
+            color={product.purchase_price === 0 || product.selling_price <= product.purchase_price ? 'danger' : 'secondary'}
+            type="number"
+            name='purchase_price'
+            label="Precio de compra"
+            placeholder='0'
+            value={String(product.purchase_price)}
+            onChange={handleChange}
+          />
+
+          <Input
+            autoComplete="off"
+            type="number"
+            size="sm"
+            variant='bordered'
+            color={product.selling_price === 0 || product.selling_price <= product.purchase_price ? 'danger' : 'secondary'}
+            name='selling_price'
+            label="Precio de venta"
+            placeholder='0'
+            value={String(product.selling_price)}
+            onChange={handleChange}
+          />
+
+          <Input
+            autoComplete="off"
+            size="sm"
+            variant='bordered'
+            color={product.quantity === 0 ? 'danger' : 'secondary'}
+            type="number"
+            name='quantity'
+            label="Cantidad"
+            placeholder='0'
+            value={String(product.quantity)}
+            onChange={handleChange}
+          />
+
+          <Input
+            autoComplete="off"
+            size="sm"
+            variant='bordered'
+            color={product.reference === '' ? 'danger' : 'secondary'}
+            type="text"
+            name='reference'
+            label="Referencia"
+            placeholder='Referencia del Producto'
+            value={String(product.reference)}
+            onChange={handleChange}
+          />
+
           <div className='relative'>
 
             <Input
-              placeholder='Proveedor'
+              autoComplete="off"
+              placeholder='Area'
               type='text'
-              color='secondary'
+              color={product.area === '' ? 'danger' : 'secondary'}
               variant='bordered'
               size='md'
-              label='Proveedor'
-              value={provider}
+              label='Area del Producto'
+              value={searchArea}
               onChange={handleChange}
-              name='provider'
+              name='area'
             />
 
-            {searchedProviders.length > 0 && <Card className='absolute z-20 flex flex-col w-full gap-2'>
+            {searchedArea.length > 0 && <Card className='absolute z-20 flex flex-col w-full gap-2'>
               <CardBody className='flex flex-col gap-2'>
-                {searchedProviders.map(provider => <Button
-                  onClick={handleClick}
-                  value={provider}
-                  color={providers.includes(provider) ? 'success' : 'warning'}
+                {searchedArea.map(area => <Button
+                  onClick={handleArea}
+                  value={area}
+                  color={areas.includes(area) ? 'success' : 'warning'}
                   name='select'
                   variant='flat'
                   className='flex justify-between'
-                  endContent={!providers.includes(provider)
+                  endContent={!areas.includes(area)
                     ? <Chip color='warning' size='sm'>Nuevo</Chip>
                     : null}
-                  key={provider}>
-                  {provider}
+                  key={area}>
+                  {area}
                 </Button>)}
               </CardBody>
             </Card>}
 
-            {selectedPrivider !== null && <Card className='absolute top-0 w-full z-20 px-5'>
+            {product.area !== '' && <Card className='absolute top-0 w-full z-20 px-5'>
               <CardBody className='flex flex-row justify-between items-center w-full'>
-                <span>{selectedPrivider}</span>
+                <span>{product.area}</span>
                 <Button
                   size='sm'
                   isIconOnly
                   color='danger'
                   name='delete'
-                  onClick={handleClick}
+                  onClick={handleArea}
                   startContent={<FontAwesomeIcon icon={faTrashCan} color='#fff' />} />
               </CardBody>
             </Card>}
           </div>
 
-          <Input
-            placeholder='Referencia'
-            type='text'
-            color='secondary'
-            variant='bordered'
-            size='md'
-            label='Referencia'
-            value={reference}
-            name='reference'
-            onChange={handleChange}
-          />
 
-          <Input
-            type="date"
-            color='secondary'
-            variant='bordered'
-            value={date}
-            onChange={handleDateChange}
-          />
+          <div className='relative'>
 
-          <Select
-            label="Propietario"
-            placeholder="Propietario de la factura"
-            selectionMode='single'
-            color='secondary'
-            variant='bordered'
-            isRequired
-            selectedKeys={owner}
-            onSelectionChange={setOwner}
-            defaultSelectedKeys={['cristian']}
-          >
-            <SelectItem key='cristian' value='cristian'>Cristian</SelectItem>
-            <SelectItem key='cherry' value='cherry'>Cherry</SelectItem>
-          </Select>
+            <Input
+              autoComplete="off"
+              placeholder='Tipo de Producto'
+              type='text'
+              color={product.type.length === 0 ? 'danger' : 'secondary'}
+              variant='bordered'
+              size='md'
+              label='Tipo de Producto'
+              value={searchType}
+              onChange={handleChange}
+              name='type'
+            />
+
+            {searchedType.length > 0 && <Card className='absolute z-20 flex flex-col w-full gap-2'>
+              <CardBody className='flex flex-col gap-2'>
+                {searchedType.filter(type => !product.type.includes(type)).map(type => <Button
+                  onClick={handleType}
+                  value={type}
+                  color={types.includes(type) ? 'success' : 'warning'}
+                  name='select'
+                  variant='flat'
+                  className='flex justify-between'
+                  endContent={!types.includes(type)
+                    ? <Chip color='warning' size='sm'>Nuevo</Chip>
+                    : null}
+                  key={type}>
+                  {type}
+                </Button>)}
+              </CardBody>
+            </Card>}
+
+            {product.type.length > 0 && <div className='py-3 mt-2 w-full z-10 flex gap-2 flex items-start justify-start flex-wrap'>
+              {product.type.map(type => <Chip
+                key={type}
+                color='secondary'
+                size='md'
+                endContent={<Button
+                  size='sm'
+                  value={type}
+                  isIconOnly
+                  color='danger'
+                  name='delete'
+                  className='scale-50'
+                  onClick={handleType}
+                  startContent={<FontAwesomeIcon icon={faTrashCan} color='#fff' />} />}>
+                {type}
+              </Chip>)}
+            </div>}
+          </div>
 
         </ModalBody>
 
         <ModalFooter>
+
           <Button
             name="close"
             size="sm"
             color="danger"
             variant="ghost"
-            onClick={handleOpen}
+            onClick={e => { setIsOpen(false) }}
           >
             Cerrar
           </Button>
-          {/* <Button size="sm" color="primary" onClick={handleSubmit}>
+
+          <Button
+            isDisabled={
+              product.name === '' ||
+              product.purchase_price === 0 ||
+              product.selling_price === 0 ||
+              product.quantity === 0 ||
+              product.reference === '' ||
+              product.area === '' ||
+              product.type.length === 0 ||
+              product.selling_price <= product.purchase_price
+            }
+            size="sm"
+            color="primary"
+            onClick={handleClick}
+          >
             Crear
-          </Button> */}
+          </Button>
+
         </ModalFooter>
       </ModalContent>
     </Modal>
