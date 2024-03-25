@@ -21,8 +21,8 @@ export const createInvoice = async (invoice: Invoice, products: Product[]): Prom
     const { data, error } = await supabase
       .from('invoices')
       .insert({
-        total: products.reduce((a, b) => a + b.purchase_price, 0),
-        total_selling: products.reduce((a, b) => a + b.selling_price, 0),
+        total: products.reduce((a, b) => a + b.purchase_price * b.quantity, 0),
+        total_selling: products.reduce((a, b) => a + b.selling_price + b.quantity, 0),
         ...rest
       })
       .select()

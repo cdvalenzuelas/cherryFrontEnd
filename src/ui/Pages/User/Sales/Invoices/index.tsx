@@ -110,8 +110,8 @@ export const Invoices = () => {
       </div>
 
       {(invoiceStep === 'newInvoice' || invoiceStep === 'addProducts') && <div className='flex flex-row items-center justify-start gap-2 px-5'>
-        <Chip size='sm' color='warning'>P. Compra: {newProducts.reduce((a, b) => a + b.purchase_price, 0)}</Chip>
-        <Chip size='sm' color='success'>P. Venta: {newProducts.reduce((a, b) => a + b.selling_price, 0)}</Chip>
+        <Chip size='sm' color='warning'>P. Compra: {newProducts.reduce((a, b) => a + b.purchase_price * b.quantity, 0)}</Chip>
+        <Chip size='sm' color='success'>P. Venta: {newProducts.reduce((a, b) => a + b.selling_price * b.quantity, 0)}</Chip>
         <Chip size='sm' color='secondary'>{newProducts.reduce((a, b) => a + b.quantity, 0)} unidades</Chip>
       </div>}
 

@@ -30,7 +30,7 @@ export const AddProducts: FC<Props> = ({ products, setProducts }) => {
 
           <div className="flex felx-row items-center justify-start gap-2">
             <Chip color='primary' size='sm'>{product.area}</Chip>
-            {product.type.map(item => <Chip key={item} color='secondary' size="sm">P. Compra: {product.purchase_price}</Chip>)}
+            {product.type.map(item => <Chip key={item} color='secondary' size="sm">{item}</Chip>)}
           </div>
 
         </div>
