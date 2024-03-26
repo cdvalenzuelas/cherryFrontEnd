@@ -14,16 +14,18 @@ interface Response {
 
 export const createInvoice = async (invoice: Invoice, products: Product[]): Promise<Response> => {
   const { id, total, total_selling, ...rest } = invoice
-  const newProducts = products.map(({ id, created_at, ...rest }) => rest )
+  const newProducts = products.map(({ id, created_at, ...rest }) => rest)
+  
+  console.log(invoice.owner)
 
   try {
     // Voy a insertar el plan
     const { data, error } = await supabase
       .from('invoices')
       .insert({
+        ...rest,
         total: products.reduce((a, b) => a + b.purchase_price * b.quantity, 0),
-        total_selling: products.reduce((a, b) => a + b.selling_price + b.quantity, 0),
-        ...rest
+        total_selling: products.reduce((a, b) => a + b.selling_price * b.quantity, 0)
       })
       .select()
 
