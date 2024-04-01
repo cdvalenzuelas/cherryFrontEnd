@@ -15,8 +15,6 @@ export const Sales = () => {
   const [salesStage, setSalesStage] = useState<SalesStage>('products')
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  console.log('hola')
-
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as SalesStage
 

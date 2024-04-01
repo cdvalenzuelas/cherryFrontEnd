@@ -16,12 +16,11 @@ export const Products: FC<Props> = ({ isOpen, setIsOpen }) => {
 
   useEffect(() => {
     (async () => {
-      // const internalSales = await getSales()
-      // setSales(internalSales)
+      const internalSales = await getSales()
+      setSales(internalSales)
     })()
   }, [])
 
-  // const sales = useSalesState(state => state.sales)
   const handleOpen = (e: MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as 'open' | 'close'
 
